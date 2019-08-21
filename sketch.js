@@ -4,14 +4,14 @@ Først laver vi et nogle variable til at lave en appelsin
 */
 
 // Appelsinen
-var x = 0; 
+var x = 0;
 var y = 550;
 var rad = 20;
 var xspeed = 4;
 var yspeed = -10;
 var newspeed;
 var grav = 0.1;
-var col = [200,100,0];
+var col = [200, 100, 0];
 
 // Turbanen
 var turban;
@@ -42,18 +42,18 @@ function display() {
     text("Score: "+score, width-80, 30);
     
     //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
-    if(tid > 0) {
+    if (tid > 0) {
         tid -= 1;
     }
     if (tid < 100) {
         fill(col);
-        ellipse(x, y, rad*2, rad*2);
+        ellipse(x, y, rad * 2, rad * 2);
     }
 
     // Her vises turbanen - foreløbig blot en firkant
     turban.tegn();
 }
-    
+
 function move() {
     //Her skal vi sørge for at appelsinen bevæger sig, hvis den er startet
     if (tid <= 0) {
@@ -71,18 +71,18 @@ function checkScore() {
     if (yspeed > 0) {
         if (turban.grebet(x, y, rad)) {
             score += 1;
-            shootNew(); 
+            shootNew();
         }
     }
 }
-    
+
 function shootNew() {
     //Her skal vi sørge for at en ny appelsin skydes afsted 
     x = rad;
     y = 550;
     yspeed = newspeed;
-    xspeed = 6*random(2);
-    tid = (int) (Math.random() * 400);
+    xspeed = 6 * random(2);
+    tid = (int)(Math.random() * 400);
     console.log(tid);
 }
 
@@ -90,7 +90,7 @@ function keyPressed() {
     turban.move(key);
 }
 
-function mousePressed(){
+function mousePressed() {
 
 }
 
