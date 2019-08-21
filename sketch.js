@@ -81,8 +81,9 @@ function shootNew() {
     x = rad;
     y = 550;
     yspeed = newspeed;
-    xspeed = 6*Math.random();
+    xspeed = 6*random(2);
     tid = (int) (Math.random() * 400);
+    console.log(tid);
 }
 
 function keyPressed() {
@@ -100,7 +101,7 @@ OPGAVER
             I laver dem om. 
 
  Opgave 2 - lav programmet om så det er tilfældigt hvor højt oppe 
-            på venstre kan appelsinerne starter. Overvej om man kan 
+            på venstre kant appelsinerne starter. Overvej om man kan 
             sikre, at appelsinen ikke ryger ud af skærmens top men 
             stadig har en "pæn" bane
 
