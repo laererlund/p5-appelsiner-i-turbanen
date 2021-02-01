@@ -39,8 +39,8 @@ function draw() {
 
 function display() {
     fill(255);
-    text("Score: "+score, width-80, 30);
-    
+    text("Score: " + score, width - 80, 30);
+
     //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
     if (tid > 0) {
         tid -= 1;
