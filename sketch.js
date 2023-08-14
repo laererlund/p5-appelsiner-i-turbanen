@@ -1,73 +1,82 @@
 /*
-Først laver vi et nogle variable til at lave en appelsin
- - en kugle som vi vil skyde afsted og fange i en turban
+ * Javascript, men en lidt gammeldags form. Nøgleordet "var"
+ * erstattes i nyere udgaver af javascript med de to ord 
+ * let og const, der betegner hhv. en variabel, som vi starter
+ * med at "lade have" en bestemt værdi, og en konstant, som
+ * ikke kan ændres under programmets kørsel
+ * 
+ * Der er opgaver nederst i denne fil!
+ * 
+ */ 
+
+/* 
+ * Først laver vi et nogle variable til at lave en appelsin
+ * - en cirkel som vi vil skyde afsted, nede fra venstre hjørne, 
+ * og fange i en turban
 */
 
 // Appelsinen
-var x = 0;
-var y = 550;
-var rad = 20;
-var xspeed = 4;
-var yspeed = -10;
-var newspeed;
-var grav = 0.1;
-var col = [200, 100, 0];
+var x = 0;                  // Appelsinens x-koordinat
+var y = 550;                // Appelsinens y-koordinat
+var rad = 20;               // Appelsin-cirklens radius
+var xspeed = 4;             // Appelsinens fart langs x-aksen
+var yspeed = -10;           // Appelsinens fart langs y-aksen. 
+                            // Negativ, fordi positiv er nedad på skærmen
+var startSpeed;             // Appelsinens start-y-hastighed
+var col = [200, 100, 0];    // Appelsinens farve
 
 // Turbanen
-var turban;
+var turban;                 
 
 // Øvrige
-var tid = 150;
-var score = 0;
+var tid = 150;              // ???? Se opgave 1
+var grav = 0.1;             // ????
+var score = 0;              // Antallet af appelsiner der er grebet
 
 /* 
- * 
+ * setup()-funktionen køres een gang, når scriptet starter (eller genstartes)
  */
 function setup() {
-    createCanvas(750, 600);
+    createCanvas(750, 600); // Størrelsen af spillet i browservinduet
     newspeed = yspeed;
     x = rad;
-    turban = new Kurv(670, 100, 70, 50, 10);
+
+    // Nu tildeles variablen turban et indhold: Et nyt objekt af klassen Kurv 
+    turban = new Kurv(670, 100, 70, 50, 10); 
 }
 
+/*
+ * draw()-funktionen kører hele tiden, 60 gange i sekundet (hvis muligt)
+ */
 function draw() {
-    background(0);
-    move();
-    checkScore();
+    background(0);           // Baggrunden tegnes sort. Indbygget i p5
+    move();                  // Funktionen move() er defineret herunder
+    checkScore();            // - ligesom de to næste
     display();
 }
 
-function display() {
-    fill(255);
-    text("Score: " + score, width - 80, 30);
-
-    //Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
-    if (tid > 0) {
-        tid -= 1;
-    }
-    if (tid < 100) {
-        fill(col);
-        ellipse(x, y, rad * 2, rad * 2);
-    }
-
-    // Her vises turbanen - foreløbig blot en firkant
-    turban.tegn();
-}
-
+/*
+ * Her skal vi sørge for at appelsinen bevæger sig, men kun hvis den er startet
+ */
 function move() {
-    //Her skal vi sørge for at appelsinen bevæger sig, hvis den er startet
-    if (tid <= 0) {
+    if (tid <= 0) {          // ???? Se opgave 1
         x += xspeed;
         y += yspeed;
         yspeed += grav;
     }
+    // Hvis appelsinen er røget ud over højre kant eller ned under banen:
     if (x > width || y > height) {
         shootNew();
     }
 }
 
+/*
+ * Her checkes om turbanen har fanget appelsinen. 
+ * Hvis ja, tælles scoren og der skydes en ny appelsin afsted
+ * 
+ * ??? Men hvad gør den første betingelse?
+ */
 function checkScore() {
-    // Her checkes om turbanen har fanget appelsinen. Hvis ja, skydes en ny appelsin afsted
     if (yspeed > 0) {
         if (turban.grebet(x, y, rad)) {
             score += 1;
@@ -76,20 +85,49 @@ function checkScore() {
     }
 }
 
-function shootNew() {
-    //Her skal vi sørge for at en ny appelsin skydes afsted 
-    x = rad;
-    y = 550;
-    yspeed = newspeed;
-    xspeed = 6 * random(2);
-    tid = (int)(Math.random() * 400);
-    console.log(tid);
+/*
+ * Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
+ */
+function display() {
+    fill(255);               // Sætter tegnefarven til hvid
+    text("Score: " + score, width - 80, 30);
+
+    if (tid > 0) {           // ???? Se opgave 1
+        tid -= 1;
+    }
+    if (tid < 100) {         // ???? Se opgave 1
+        fill(col);           // Sætter tegnefarven til appelsinens farve
+        ellipse(x, y, rad * 2, rad * 2); // og tegner den
+    }
+
+    // Til sidst tegnes turbanen - tegn() er defineret i Kurv-klassen. Foreløbig en firkant
+    turban.tegn();
 }
 
+/*
+ * Her skal vi sørge for, at en ny appelsin skydes afsted 
+ */
+function shootNew() {
+    x = rad;                  // nulstil position og y-hastighed
+    y = 550;
+    yspeed = newspeed;
+    xspeed = 6 * random(2);   // lav en ny, tilfældig x-hastighed
+    tid = (int)(Math.random() * 400);   //???? Se opgave 1
+    console.log(tid);         // skriv den nye værdi i konsollen
+}
+
+/*
+ * Her lytter vi efter input fra tastaturet og sender 
+ * det indtastede bogstav videre som parameter til 
+ * turbanens move()-funktion 
+ */
 function keyPressed() {
     turban.move(key);
 }
 
+/*
+ * Foreløbig gør denne funktion ikke noget. Kan du bruge den?
+ */
 function mousePressed() {
 
 }
