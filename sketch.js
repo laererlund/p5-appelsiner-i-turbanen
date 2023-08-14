@@ -138,14 +138,15 @@ OPGAVER
             Skriv det i kommentarer, prøv at se hvad der sker, når
             I laver dem om. 
 
- Opgave 2 - lav programmet om så det er tilfældigt hvor højt oppe 
+ Opgave 2 - Prøv at køre spillet. Det er ret dårligt...
+            Lav programmet om så man også kan bevæge turbanen mod
+            højre og venstre med A- og D-tasterne. Prøv jer frem med
+            forskellige løsninger for hvor hurtigt turbanen skal rykke
+
+ Opgave 3 - lav programmet om så det er tilfældigt hvor højt oppe 
             på venstre kant appelsinerne starter. Overvej om man kan 
             sikre, at appelsinen ikke ryger ud af skærmens top men 
             stadig har en "pæn" bane
-
- Opgave 3 - lav programmet om så man også kan bevæge turbanen mod
-            højre og venstre med A- og D-tasterne. Prøv jer frem med
-            forskellige løsninger for hvor hurtigt turbanen skal rykke
 
  Opgave 4 - ret programmet til, så det også angives hvor mange 
             appelsiner man IKKE greb med turbanen
