@@ -129,7 +129,7 @@ function keyPressed() {
  * Foreløbig gør denne funktion ikke noget. Kan du bruge den?
  */
 function mousePressed() {
-
+    // Kunne fx bruges til at ændre xspeed og yspeed
 }
 
 /*
