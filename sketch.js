@@ -15,7 +15,7 @@
  * og fange i en turban
 */
 
-// Appelsinen
+/*// Appelsinen
 var x = 0;                  // Appelsinens x-koordinat
 var y = 550;                // Appelsinens y-koordinat
 var rad = 20;               // Appelsin-cirklens radius
@@ -23,26 +23,26 @@ var xspeed = 4;             // Appelsinens fart langs x-aksen
 var yspeed = -10;           // Appelsinens fart langs y-aksen. 
                             // Negativ, fordi positiv er nedad på skærmen
 var startSpeed;             // Appelsinens start-y-hastighed
-var col = [200, 100, 0];    // Appelsinens farve
+var col = [200, 100, 0];    // Appelsinens farve*/
 
-// Turbanen
-var turban;                 
+// Turbanen og appelsinerne
+var turban;
+var appelsiner = [];             
 
 // Øvrige
-var tid = 150;              // ???? Se opgave 1
 var grav = 0.1;             // ????
 var score = 0;              // Antallet af appelsiner der er grebet
+var missed = 0;             // Antal appelsiner der ikke er grebet
+var ture = 0;
 
 /* 
  * setup()-funktionen køres een gang, når scriptet starter (eller genstartes)
  */
 function setup() {
     createCanvas(750, 600); // Størrelsen af spillet i browservinduet
-    newspeed = yspeed;
-    x = rad;
-
     // Nu tildeles variablen turban et indhold: Et nyt objekt af klassen Kurv 
-    turban = new Kurv(670, 100, 70, 50, 10); 
+    turban = new Kurv(670, 100, 86, 50, 8); 
+    appelsiner.push(new Frugt(20, 550, 40, 40, random(8), random(6,-12), 150));
 }
 
 /*
@@ -53,20 +53,28 @@ function draw() {
     move();                  // Funktionen move() er defineret herunder
     checkScore();            // - ligesom de to næste
     display();
+    ture++;
+    if (ture%1000 == 0) {
+        shootNew();
+    }
 }
 
 /*
  * Her skal vi sørge for at appelsinen bevæger sig, men kun hvis den er startet
  */
 function move() {
-    if (tid <= 0) {          // ???? Se opgave 1
-        x += xspeed;
-        y += yspeed;
-        yspeed += grav;
-    }
-    // Hvis appelsinen er røget ud over højre kant eller ned under banen:
-    if (x > width || y > height) {
-        shootNew();
+    turban.flyt();
+    for (var i=0; i<appelsiner.length; i++) {
+        appelsiner[i].tid -= 1;
+        if (appelsiner[i].erIgang()){
+            appelsiner[i].flyt();
+            if(appelsiner[i].udenfor()) {
+                missed += 1;
+                appelsiner.splice(i,1);     // fjerner appelsinen, hvis den er udenfor banen
+                i--;                        //  sørger for at vi ikke springer den næste over
+                shootNew();
+            }
+        }
     }
 }
 
@@ -77,10 +85,13 @@ function move() {
  * ??? Men hvad gør den første betingelse?
  */
 function checkScore() {
-    if (yspeed > 0) {
-        if (turban.grebet(x, y, rad)) {
-            score += 1;
-            shootNew();
+    for (var i=0; i<appelsiner.length; i++) {
+        if (appelsiner[i].yspeed > 0) {
+            if (turban.grebet(appelsiner[i])) {
+                score += 1;
+                appelsiner.splice(i,1);     // fjerner appelsinen, hvis den er grebet
+                i--;                        //  sørger for at vi ikke springer den næste over
+            }
         }
     }
 }
@@ -89,31 +100,25 @@ function checkScore() {
  * Her skal vi sørge for at appelsinen bliver vist, hvis den skal vises
  */
 function display() {
-    fill(255);               // Sætter tegnefarven til hvid
+    fill(255);               // Sætter tegnefarven til hvid og skriver stats
     text("Score: " + score, width - 80, 30);
+    text("Missed: " + missed, width-80, 60);
 
-    if (tid > 0) {           // ???? Se opgave 1
-        tid -= 1;
+    // Tegner appelsinerne, hvis de kan ses
+    for (var i=0; i<appelsiner.length; i++) {
+        if (appelsiner[i].kanSes()) {
+            appelsiner[i].tegn();            
+        }
     }
-    if (tid < 100) {         // ???? Se opgave 1
-        fill(col);           // Sætter tegnefarven til appelsinens farve
-        ellipse(x, y, rad * 2, rad * 2); // og tegner den
-    }
-
-    // Til sidst tegnes turbanen - tegn() er defineret i Kurv-klassen. Foreløbig en firkant
+    // Tegner turbanen - tegn() er defineret i Kurv-klassen. Foreløbig en firkant
     turban.tegn();
 }
 
 /*
- * Her skal vi sørge for, at en ny appelsin skydes afsted 
+ * Her skal vi sørge for, at en ny appelsin føjes til listen 
  */
 function shootNew() {
-    x = rad;                  // nulstil position og y-hastighed
-    y = 550;
-    yspeed = newspeed;
-    xspeed = 6 * random(2);   // lav en ny, tilfældig x-hastighed
-    tid = (int)(Math.random() * 400);   //???? Se opgave 1
-    console.log(tid);         // skriv den nye værdi i konsollen
+    appelsiner.push(new Frugt(random(20,120), random(height-300,height-50), 40, 40, random(1,5), random(-7,-9), random(20,340)));
 }
 
 /*
@@ -121,17 +126,19 @@ function shootNew() {
  * det indtastede bogstav videre som parameter til 
  * turbanens move()-funktion 
  */
-function keyPressed() {
+/*function keyPressed() {
     turban.move(key);
-}
+}*/
 
 /*
  * Foreløbig gør denne funktion ikke noget. Kan du bruge den?
  */
 function mousePressed() {
     // Kunne fx bruges til at ændre xspeed og yspeed
+    // eller at indsætte en ny appelsin (x,y,bredde,højde,xspeed,yspeed,tid)
+    appelsiner.push(new Frugt(mouseX, mouseY, 40, 40, random(-3,3), random(-3,-10), random(20,340)));
+    console.log("Der er nu " + appelsiner.length + " appelsiner");
 }
-
 /*
 OPGAVER
  Opgave 1 - undersøg hvad variablerne  grav  og  tid  bruges til.
@@ -164,9 +171,9 @@ OPGAVER
             hvis ikke I kan huske det:   https://p5js.org/reference/
             Lav programmet om, så man kan flytte turbanen med musen
 
- Opgave 7 - lav en Appelsin-klasse, lige som der er en Kurv-klasse. 
+ Opgave 7 - lav en Frugt-klasse, lige som der er en Kurv-klasse. 
             Flyt koden til appelsinen ud i et selvstændigt script.
-            Overvej hvad det skal hedde, oghvilke variabler og funktioner, 
+            Overvej hvad det skal hedde, og hvilke variabler og funktioner, 
             der skal lægges over i det nye script, herunder hvordan det 
             kommer til at berøre turbanen. Skriv jeres overvejelser i 
             kommentarerne
